@@ -206,10 +206,12 @@
                     const profile = document.getElementById('profile-dropdown');
                     if (!notif || !profile) return;
 
-                    if (!e.target.closest('#notif-dropdown') && !e.target.closest('button[onclick="toggleNotif()"]')) {
+                    if (!e.target.closest('#notif-dropdown') && !e.target.closest(
+                        'button[onclick="toggleNotif()"]')) {
                         notif.classList.add('hidden');
                     }
-                    if (!e.target.closest('#profile-dropdown') && !e.target.closest('button[onclick="toggleProfile()"]')) {
+                    if (!e.target.closest('#profile-dropdown') && !e.target.closest(
+                            'button[onclick="toggleProfile()"]')) {
                         profile.classList.add('hidden');
                     }
                 });
@@ -243,17 +245,20 @@
                         const searchFields = getSearchFields();
 
                         state.filtered = state.data.filter((item) => {
-                            const matchesSearch = !query || searchFields.some((field) => String(item[field] ?? '').toLowerCase().includes(query));
+                            const matchesSearch = !query || searchFields.some((field) => String(item[field] ??
+                                '').toLowerCase().includes(query));
                             if (!matchesSearch) return false;
 
                             return filters.every((filter) => {
                                 const el = document.getElementById(filter.elementId);
                                 const filterVal = el ? el.value : '';
                                 if (!filterVal) return true;
-                                const raw = filter.accessor ? filter.accessor(item) : item[filter.field];
+                                const raw = filter.accessor ? filter.accessor(item) : item[filter
+                                .field];
                                 const value = String(raw ?? '').toLowerCase();
                                 const expected = String(filterVal).toLowerCase();
-                                return (filter.mode || 'exact') === 'includes' ? value.includes(expected) : value === expected;
+                                return (filter.mode || 'exact') === 'includes' ? value.includes(
+                                    expected) : value === expected;
                             });
                         });
                     }
@@ -287,20 +292,24 @@
                         const pageData = state.filtered.slice(start, start + perPage);
 
                         if (!pageData.length) {
-                            tbody.innerHTML = options.emptyRowHtml || '<tr><td class="text-center py-10 text-slate-400">No records found</td></tr>';
+                            tbody.innerHTML = options.emptyRowHtml ||
+                                '<tr><td class="text-center py-10 text-slate-400">No records found</td></tr>';
                         } else {
-                            tbody.innerHTML = pageData.map((item, idx) => options.renderRow(item, start + idx)).join('');
+                            tbody.innerHTML = pageData.map((item, idx) => options.renderRow(item, start + idx)).join(
+                            '');
                         }
 
                         const from = total ? start + 1 : 0;
                         const to = Math.min(start + perPage, total);
-                        paginationInfo.textContent = total ? `Showing ${from}-${to} of ${total} ${itemLabel}` : `Showing 0 ${itemLabel}`;
+                        paginationInfo.textContent = total ? `Showing ${from}-${to} of ${total} ${itemLabel}` :
+                            `Showing 0 ${itemLabel}`;
 
                         paginationButtons.innerHTML = '';
                         const btn = (label, page, disabled, active) => {
                             const b = document.createElement('button');
                             b.innerHTML = label;
-                            b.className = `px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${active ? 'bg-blue-600 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'} ${disabled ? 'opacity-40 pointer-events-none' : ''}`;
+                            b.className =
+                                `px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${active ? 'bg-blue-600 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'} ${disabled ? 'opacity-40 pointer-events-none' : ''}`;
                             if (!disabled && !active) {
                                 b.onclick = () => {
                                     state.currentPage = page;
@@ -311,11 +320,13 @@
                             return b;
                         };
 
-                        paginationButtons.appendChild(btn('← Prev', state.currentPage - 1, state.currentPage === 1, false));
+                        paginationButtons.appendChild(btn('← Prev', state.currentPage - 1, state.currentPage === 1,
+                            false));
                         for (let i = 1; i <= totalPages; i++) {
                             paginationButtons.appendChild(btn(String(i), i, false, i === state.currentPage));
                         }
-                        paginationButtons.appendChild(btn('Next →', state.currentPage + 1, state.currentPage === totalPages, false));
+                        paginationButtons.appendChild(btn('Next →', state.currentPage + 1, state.currentPage ===
+                            totalPages, false));
 
                         options.onAfterRender?.(pageData, state.filtered);
                     }
